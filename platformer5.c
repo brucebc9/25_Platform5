@@ -10,7 +10,7 @@
 #include <string.h>
 
 #include "nesdoug.h"
-#//link "nesdoug.s"
+//#link "nesdoug.s"
 
 #include "Sprites.h" // holds our metasprite data
 #include "platformer5.h"
