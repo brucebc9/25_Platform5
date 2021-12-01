@@ -6,12 +6,17 @@
  *	Doug Fraker 2018
  */	
  
-#include "LIB/neslib.h"
-#include "LIB/nesdoug.h"
+#include "neslib.h"
+#include <string.h>
+
+#include "nesdoug.h"
+#//link "nesdoug.s"
+
 #include "Sprites.h" // holds our metasprite data
 #include "platformer5.h"
+#inlcude "rooms.c"
 
-
+//#resource "platformer5.chr"
 	
 	
 void main (void) {
