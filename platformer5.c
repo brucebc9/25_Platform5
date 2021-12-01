@@ -5,19 +5,30 @@
  *	using neslib
  *	Doug Fraker 2018
  */	
- 
+
+// for horizontal scrolling
+#define NES_MIRRORING 1
+
 #include "neslib.h"
 #include <string.h>
-#include "rooms.c"
+
+//#resource "platformer5.chr"
+
 #include "nesdoug.h"
 //#link "nesdoug.s"
 
 #include "Sprites.h" // holds our metasprite data
+#include "rooms.c"
 #include "platformer5.h"
 
+/* famitone stuff */
+//#link "famitone2.s"
+//#link "SoundFx.s"
+//#link "TestMusic3.s"
+extern char TestMusic3_music_data[];
+extern char sounds[];
 
-//#resource "platformer5.chr"
-	
+#define VRAMBUF ((byte*)0x700)
 	
 void main (void) {
 	
@@ -147,10 +158,10 @@ void draw_sprites(void){
 	
 	// draw 1 hero
 	if(direction == LEFT) {
-		oam_meta_spr(high_byte(BoxGuy1.x), high_byte(BoxGuy1.y), RoundSprL);
+		oam_meta_spr(high_byte(BoxGuy1.x), high_byte(BoxGuy1.y),sprid, RoundSprL);
 	}
 	else{
-		oam_meta_spr(high_byte(BoxGuy1.x), high_byte(BoxGuy1.y), RoundSprR);
+		oam_meta_spr(high_byte(BoxGuy1.x), high_byte(BoxGuy1.y),sprid, RoundSprR);
 	}
 	
 	
@@ -161,7 +172,7 @@ void draw_sprites(void){
 		temp1 = coin_active[index];
 		temp2 = coin_x[index];
 		if(temp1 && (temp_y < 0xf0)) {
-			oam_meta_spr(temp2, temp_y, CoinSpr);
+			sprid = oam_meta_spr(temp2, temp_y,sprid, CoinSpr);
 		}
 	}
 	
@@ -173,16 +184,16 @@ void draw_sprites(void){
 		temp2 = enemy_x[index];
 		if(temp2 > 0xf0) continue;
 		if(temp1 && (temp_y < 0xf0)) {
-			oam_meta_spr(temp2, temp_y, EnemySpr);
+			sprid = oam_meta_spr(temp2, temp_y,sprid, EnemySpr);
 		}
 	}
 	
 	
 	
 	// draw "coins" at the top in sprites
-	oam_meta_spr(16,16, CoinsSpr);
+	sprid = oam_meta_spr(16,16,sprid, CoinsSpr);
 	temp1 = coins + 0xf0;
-	oam_spr(64,16,temp1,3);
+	sprid = oam_spr(64,16,temp1,3,sprid);
 }
 	
 

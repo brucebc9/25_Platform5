@@ -1,15 +1,58 @@
 ;written by Doug Fraker 2018
 ;v 1.01
 
+.segment "CHARS"
+
+.incbin "platformer5.chr"
+
+.segment "CODE"
+
 .export _set_vram_buffer, _multi_vram_buffer_horz, _multi_vram_buffer_vert, _one_vram_buffer
 .export _clear_vram_buffer, _get_pad_new, _get_frame_count, _set_music_speed
 .export _check_collision, _pal_fade_to, _set_scroll_x, _set_scroll_y, _add_scroll_y, _sub_scroll_y
 .export  _get_ppu_addr, _get_at_addr, _set_data_pointer, _set_mt_pointer, _buffer_4_mt, _buffer_1_mt
 .export _color_emphasis, _xy_split, _gray_line, _seed_rng
 
+
+PPU_CTRL	=$2000
+PPU_MASK	=$2001
+PPU_STATUS	=$2002
+PPU_OAM_ADDR=$2003
+PPU_OAM_DATA=$2004
+PPU_SCROLL	=$2005
+PPU_ADDR	=$2006
+PPU_DATA	=$2007
+PPU_OAM_DMA	=$4014
+PPU_FRAMECNT=$4017
+DMC_FREQ	=$4010
+CTRL_PORT1	=$4016
+CTRL_PORT2	=$4017
+
+OAM_BUF		=$0200
+PAL_BUF		=$01c0
+VRAM_BUF	=$0700
+
+.segment "ZEROPAGE"
+
+VRAM_INDEX:			.res 1
+META_PTR:			.res 2
+DATA_PTR:			.res 2
+
+PAD_STATEP: 		.res 2
+PAD_STATET: 		.res 2
+
 .segment "CODE"
 
+.import _set_vram_update, _ppu_wait_nmi
+.import popa, popax
+.import _delay, _pal_bright
+.importzp TEMP, FRAME_CNT1
+.importzp _PAD_STATE
+.importzp PPU_MASK_VAR, PPU_CTRL_VAR
+;.importzp FT_SONG_SPEED
+.importzp SCROLL_X, SCROLL_Y, RAND_SEED
 
+PTR = TEMP
 
 
 ;void set_vram_buffer(void)
